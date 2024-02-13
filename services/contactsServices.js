@@ -1,8 +1,12 @@
-const fs = require("fs/promises");
-const path = require("path");
-const { nanoid } = require("nanoid");
+import fs from "fs/promises";
+import path from "path";
+import { fileURLToPath } from "url";
+import { nanoid } from "nanoid";
 
-const contactsPath = path.join(__dirname, "./db/contacts.json");
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const contactsPath = path.join(__dirname, "../db/contacts.json");
 
 async function listContacts() {
   const contacts = await fs.readFile(contactsPath);
@@ -34,9 +38,4 @@ async function addContact(name, email, phone) {
   return newContact;
 }
 
-module.exports = {
-  listContacts,
-  getContactById,
-  removeContact,
-  addContact,
-};
+export default { listContacts, getContactById, removeContact, addContact };
