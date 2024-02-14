@@ -44,13 +44,9 @@ export const createContact = async (req, res, next) => {
   try {
     const { error } = createContactSchema.validate(req.body);
     if (error) {
-      throw HttpError(400);
+      throw HttpError(400, error.message);
     }
-    const newContact = await contactsService.addContact(
-      req.body.name,
-      req.body.email,
-      req.body.phone
-    );
+    const newContact = await contactsService.addContact(req.body);
     res.status(201).json(newContact);
   } catch (error) {
     next(error);
