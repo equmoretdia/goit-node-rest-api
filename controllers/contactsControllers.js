@@ -46,6 +46,25 @@ export const updateContact = async (req, res, next) => {
   }
 };
 
+export const updateStatusContact = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const updatedContactStatus = await ContactsModel.findByIdAndUpdate(
+      id,
+      req.body,
+      {
+        new: true,
+      }
+    );
+    if (!updatedContactStatus) {
+      throw HttpError(404);
+    }
+    res.json(updatedContactStatus);
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const deleteContact = async (req, res, next) => {
   try {
     const { id } = req.params;

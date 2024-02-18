@@ -41,4 +41,13 @@ const updateContactSchema = Joi.object({
   favorite: Joi.boolean(),
 });
 
-export { ContactsModel, createContactSchema, updateContactSchema };
+const updateStatusContactSchema = Joi.object({
+  favorite: Joi.boolean().required(),
+});
+
+export {
+  ContactsModel,
+  createContactSchema,
+  updateContactSchema,
+  updateStatusContactSchema,
+};
