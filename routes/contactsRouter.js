@@ -6,11 +6,11 @@ import {
   createContact,
   updateContact,
 } from "../controllers/contactsControllers.js";
-import validateBody from "../helpers/validateBody.js";
+import { validateBody } from "../helpers";
 import {
   createContactSchema,
   updateContactSchema,
-} from "../schemas/contactsSchemas.js";
+} from "../models/contactsModel.js";
 
 const contactsRouter = express.Router();
 
