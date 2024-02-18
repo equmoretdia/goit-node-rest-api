@@ -1,27 +1,29 @@
 import { Schema, model } from "mongoose";
 import Joi from "joi";
 
-const contactSchema = new Schema({
-  name: {
-    type: String,
-    required: [true, "Set name for contact"],
-  },
-  email: {
-    type: String,
-  },
-  phone: {
-    type: String,
-  },
-  favorite: {
-    type: Boolean,
-    default: false,
-  },
-});
+import handleMongooseError from "../helpers/handleMongooseError.js";
 
-contactSchema.post("save", (error, data, next) => {
-  error.status = 400;
-  next();
-});
+const contactSchema = new Schema(
+  {
+    name: {
+      type: String,
+      required: [true, "Set name for contact"],
+    },
+    email: {
+      type: String,
+    },
+    phone: {
+      type: String,
+    },
+    favorite: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  { versionKey: false }
+);
+
+contactSchema.post("save", handleMongooseError);
 
 const ContactsModel = model("contact", contactSchema);
 

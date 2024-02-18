@@ -1,5 +1,5 @@
-import { ContactsModel } from "../models/contactsModel";
-import { HttpError } from "../helpers";
+import { ContactsModel } from "../models/contactsModel.js";
+import HttpError from "../helpers/HttpError.js";
 
 export const getAllContacts = async (req, res, next) => {
   try {
