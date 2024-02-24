@@ -1,19 +1,20 @@
 import { Schema, model } from "mongoose";
+import Joi from "joi";
 
-import handleMongooseError from "../helpers/handleMongooseError.js";
+import { handleMongooseError } from "../helpers/handleMongooseError.js";
 
 const subscriptionOptions = ["starter", "pro", "business"];
 
 const userSchema = new Schema(
   {
-    password: {
-      type: String,
-      required: [true, "Password is required"],
-    },
     email: {
       type: String,
       required: [true, "Email is required"],
       unique: true,
+    },
+    password: {
+      type: String,
+      required: [true, "Password is required"],
     },
     subscription: {
       type: String,
@@ -31,3 +32,9 @@ const userSchema = new Schema(
 userSchema.post("save", handleMongooseError);
 
 export const UsersModel = model("user", userSchema);
+
+export const registerSchema = Joi.object({
+  email: Joi.string().required(),
+  password: Joi.string().required(),
+  subscription: Joi.string(),
+});
