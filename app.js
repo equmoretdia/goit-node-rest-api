@@ -3,11 +3,11 @@ import morgan from "morgan";
 import cors from "cors";
 import dotenv from "dotenv";
 
-import contactsRouter from "./routes/contactsRouter.js";
+import { contactsRouter } from "./routes/contactsRouter.js";
 
 dotenv.config();
 
-const app = express();
+export const app = express();
 
 app.use(morgan("tiny"));
 app.use(cors());
@@ -23,5 +23,3 @@ app.use((err, req, res, next) => {
   const { status = 500, message = "Server error" } = err;
   res.status(status).json({ message });
 });
-
-export default app;
