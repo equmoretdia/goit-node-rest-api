@@ -3,7 +3,8 @@ import { HttpError } from "../helpers/HttpError.js";
 import { ctrlWrapper } from "../helpers/ctrlWrapper.js";
 
 const getAll = async (req, res) => {
-  const contactsList = await ContactsModel.find();
+  const { _id: owner } = req.user;
+  const contactsList = await ContactsModel.find({ owner });
   res.json(contactsList);
 };
 
@@ -17,7 +18,8 @@ const getOne = async (req, res) => {
 };
 
 const create = async (req, res) => {
-  const newContact = await ContactsModel.create(req.body);
+  const { _id: owner } = req.user;
+  const newContact = await ContactsModel.create({ ...req.body, owner });
   res.status(201).json(newContact);
 };
 

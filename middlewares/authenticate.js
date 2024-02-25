@@ -1,7 +1,10 @@
 import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
 
 import { UsersModel } from "../models/usersModel.js";
 import { HttpError } from "../helpers/HttpError.js";
+
+dotenv.config();
 
 const { SECRET_KEY } = process.env;
 
@@ -17,6 +20,7 @@ export const authenticate = async (req, res, next) => {
     if (!user) {
       next(HttpError(401));
     }
+    req.user = user;
     next();
   } catch {
     next(HttpError(401));
