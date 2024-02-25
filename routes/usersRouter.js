@@ -3,6 +3,7 @@ import {
   registerUser,
   loginUser,
   logoutUser,
+  getCurrentUser,
 } from "../controllers/usersControllers.js";
 import { validateBody } from "../helpers/validateBody.js";
 import { authenticate } from "../middlewares/authenticate.js";
@@ -15,3 +16,5 @@ usersRouter.post("/register", validateBody(registerSchema), registerUser);
 usersRouter.post("/login", validateBody(loginSchema), loginUser);
 
 usersRouter.post("/logout", authenticate, logoutUser);
+
+usersRouter.get("/current", authenticate, getCurrentUser);

@@ -53,6 +53,12 @@ const logout = async (req, res) => {
   res.status(204).json();
 };
 
+const getCurrent = async (req, res) => {
+  const { email, subscription } = req.user;
+  res.json({ email, subscription });
+};
+
 export const registerUser = ctrlWrapper(register);
 export const loginUser = ctrlWrapper(login);
 export const logoutUser = ctrlWrapper(logout);
+export const getCurrentUser = ctrlWrapper(getCurrent);
