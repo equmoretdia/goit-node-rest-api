@@ -58,7 +58,15 @@ const getCurrent = async (req, res) => {
   res.json({ email, subscription });
 };
 
+const updateSubscription = async (req, res) => {
+  const { subscription } = req.body;
+  const { _id, email } = req.user;
+  await UsersModel.findByIdAndUpdate(_id, { subscription });
+  res.json({ user: { email, subscription: subscription } });
+};
+
 export const registerUser = ctrlWrapper(register);
 export const loginUser = ctrlWrapper(login);
 export const logoutUser = ctrlWrapper(logout);
 export const getCurrentUser = ctrlWrapper(getCurrent);
+export const updateSubscriptionUser = ctrlWrapper(updateSubscription);

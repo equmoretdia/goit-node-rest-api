@@ -36,10 +36,16 @@ export const UsersModel = model("user", userSchema);
 export const registerSchema = Joi.object({
   email: Joi.string().required(),
   password: Joi.string().required(),
-  subscription: Joi.string(),
+  subscription: Joi.string().valid(...subscriptionOptions),
 });
 
 export const loginSchema = Joi.object({
   email: Joi.string().required(),
   password: Joi.string().required(),
+});
+
+export const updateSubscriptionUserSchema = Joi.object({
+  subscription: Joi.string()
+    .valid(...subscriptionOptions)
+    .required(),
 });
