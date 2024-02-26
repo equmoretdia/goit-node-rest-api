@@ -6,7 +6,7 @@ import {
   getCurrentUser,
   updateSubscriptionUser,
 } from "../controllers/usersControllers.js";
-import { validateBody } from "../helpers/validateBody.js";
+import { validateBody } from "../middlewares/validateBody.js";
 import { authenticate } from "../middlewares/authenticate.js";
 import {
   registerSchema,

@@ -4,9 +4,13 @@ import { ctrlWrapper } from "../helpers/ctrlWrapper.js";
 
 const getAll = async (req, res) => {
   const { _id: owner } = req.user;
-  const { page = 1, limit = 20 } = req.query;
+  const { page = 1, limit = 20, favorite } = req.query;
+  const filter = { owner };
+  if (favorite === "true") {
+    filter.favorite = true;
+  }
   const skip = (page - 1) * limit;
-  const contactsList = await ContactsModel.find({ owner }, "", { skip, limit });
+  const contactsList = await ContactsModel.find(filter, "", { skip, limit });
   res.json(contactsList);
 };
 
