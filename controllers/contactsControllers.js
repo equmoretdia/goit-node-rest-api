@@ -8,6 +8,8 @@ const getAll = async (req, res) => {
   const filter = { owner };
   if (favorite === "true") {
     filter.favorite = true;
+  } else if (favorite === "false") {
+    filter.favorite = false;
   }
   const skip = (page - 1) * limit;
   const contactsList = await ContactsModel.find(filter, "", { skip, limit });
