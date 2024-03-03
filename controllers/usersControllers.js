@@ -1,6 +1,7 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
+import gravatar from "gravatar";
 
 import { UsersModel } from "../models/usersModel.js";
 import { HttpError } from "../helpers/HttpError.js";
@@ -16,10 +17,14 @@ const register = async (req, res) => {
   if (registeredEmail) {
     throw HttpError(409, "Email in use");
   }
+
   const hashPassword = await bcrypt.hash(password, 10);
+  const avatarURL = gravatar.url(email);
+
   const newUser = await UsersModel.create({
     ...req.body,
     password: hashPassword,
+    avatarURL,
   });
   res.status(201).json({
     user: { email: newUser.email, subscription: newUser.subscription },
