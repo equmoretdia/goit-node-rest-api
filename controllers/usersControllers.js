@@ -4,19 +4,17 @@ import dotenv from "dotenv";
 import gravatar from "gravatar";
 import fs from "fs/promises";
 import path from "path";
-import { fileURLToPath } from "url";
 
 import { UsersModel } from "../models/usersModel.js";
 import { HttpError } from "../helpers/HttpError.js";
 import { ctrlWrapper } from "../helpers/ctrlWrapper.js";
+import { getDir } from "../helpers/getDir.js";
 
 dotenv.config();
 
 const { SECRET_KEY } = process.env;
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const avatarDir = path.join(__dirname, "../", "public", "avatars");
+const avatarDir = getDir("../public/avatars");
 
 const register = async (req, res) => {
   const { email, password } = req.body;
