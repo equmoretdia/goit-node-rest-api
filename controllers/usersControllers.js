@@ -2,6 +2,9 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import gravatar from "gravatar";
+import fs from "fs/promises";
+import path from "path";
+import { fileURLToPath } from "url";
 
 import { UsersModel } from "../models/usersModel.js";
 import { HttpError } from "../helpers/HttpError.js";
@@ -10,6 +13,10 @@ import { ctrlWrapper } from "../helpers/ctrlWrapper.js";
 dotenv.config();
 
 const { SECRET_KEY } = process.env;
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const avatarDir = path.join(__dirname, "../", "public", "avatars");
 
 const register = async (req, res) => {
   const { email, password } = req.body;
@@ -70,8 +77,21 @@ const updateSubscription = async (req, res) => {
   res.json({ user: { email, subscription: subscription } });
 };
 
+const updateAvatar = async (req, res) => {
+  const { _id } = req.user;
+  const { path: tempUpload, originalname } = req.file;
+  console.log(req.file);
+  const filename = `${_id}_${originalname}`;
+  const resultUpload = path.join(avatarDir, filename);
+  await fs.rename(tempUpload, resultUpload);
+  const avatarURL = path.join("avatars", filename);
+  await UsersModel.findByIdAndUpdate(_id, { avatarURL });
+  res.json({ avatarURL });
+};
+
 export const registerUser = ctrlWrapper(register);
 export const loginUser = ctrlWrapper(login);
 export const logoutUser = ctrlWrapper(logout);
 export const getCurrentUser = ctrlWrapper(getCurrent);
 export const updateSubscriptionUser = ctrlWrapper(updateSubscription);
+export const updateAvatarUser = ctrlWrapper(updateAvatar);
