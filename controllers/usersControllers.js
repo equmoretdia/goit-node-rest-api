@@ -9,6 +9,7 @@ import { UsersModel } from "../models/usersModel.js";
 import { HttpError } from "../helpers/HttpError.js";
 import { ctrlWrapper } from "../helpers/ctrlWrapper.js";
 import { getDir } from "../helpers/getDir.js";
+import { resizeAvatar } from "../helpers/resizeAvatar.js";
 
 dotenv.config();
 
@@ -78,9 +79,10 @@ const updateSubscription = async (req, res) => {
 const updateAvatar = async (req, res) => {
   const { _id } = req.user;
   const { path: tempUpload, originalname } = req.file;
-  console.log(req.file);
   const filename = `${_id}_${originalname}`;
   const resultUpload = path.join(avatarDir, filename);
+
+  await resizeAvatar(tempUpload);
   await fs.rename(tempUpload, resultUpload);
   const avatarURL = path.join("avatars", filename);
   await UsersModel.findByIdAndUpdate(_id, { avatarURL });
