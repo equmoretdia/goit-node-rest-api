@@ -1,6 +1,7 @@
 import express from "express";
 import {
   registerUser,
+  verifyEmailUser,
   loginUser,
   logoutUser,
   getCurrentUser,
@@ -18,7 +19,13 @@ import {
 
 export const usersRouter = express.Router();
 
+// sign up
+
 usersRouter.post("/register", validateBody(registerSchema), registerUser);
+
+usersRouter.get("/verify/:verificationToken", verifyEmailUser);
+
+// sign in
 
 usersRouter.post("/login", validateBody(loginSchema), loginUser);
 
@@ -26,12 +33,16 @@ usersRouter.post("/logout", authenticate, logoutUser);
 
 usersRouter.get("/current", authenticate, getCurrentUser);
 
+// subscription
+
 usersRouter.patch(
   "/",
   authenticate,
   validateBody(updateSubscriptionUserSchema),
   updateSubscriptionUser
 );
+
+//avatar
 
 usersRouter.patch(
   "/avatars",
