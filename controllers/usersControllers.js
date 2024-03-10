@@ -4,16 +4,18 @@ import dotenv from "dotenv";
 import gravatar from "gravatar";
 import fs from "fs/promises";
 import path from "path";
+import { nanoid } from "nanoid";
 
 import { UsersModel } from "../models/usersModel.js";
 import { HttpError } from "../helpers/HttpError.js";
 import { ctrlWrapper } from "../helpers/ctrlWrapper.js";
 import { getDir } from "../helpers/getDir.js";
 import { resizeAvatar } from "../helpers/resizeAvatar.js";
+import { sendEmail } from "../helpers/sendEmail.js";
 
 dotenv.config();
 
-const { SECRET_KEY } = process.env;
+const { SECRET_KEY, BASE_URL } = process.env;
 
 const avatarDir = getDir("../public/avatars");
 
@@ -26,12 +28,23 @@ const register = async (req, res) => {
 
   const hashPassword = await bcrypt.hash(password, 10);
   const avatarURL = gravatar.url(email);
+  const verificationToken = nanoid();
 
   const newUser = await UsersModel.create({
     ...req.body,
     password: hashPassword,
     avatarURL,
+    verificationToken,
   });
+
+  const emailData = {
+    to: email,
+    subject: "please verify your email to complete the registration",
+    html: `<a target="_blank" href="${BASE_URL}/api/users/verify/${verificationToken}">Click to verify your email</a>`,
+  };
+
+  await sendEmail(emailData);
+
   res.status(201).json({
     user: { email: newUser.email, subscription: newUser.subscription },
   });
