@@ -63,6 +63,26 @@ const verifyEmail = async (req, res) => {
   res.json({ message: "Verification successful" });
 };
 
+const repeatVerifyEmail = async (req, res) => {
+  const { email } = req.body;
+  const user = await UsersModel.findOne({ email });
+  if (!user) {
+    throw HttpError(401, "Email is wrong");
+  }
+  if (user.verify) {
+    throw HttpError(400, "Verification has already been passed");
+  }
+
+  const emailData = {
+    to: email,
+    subject: "please verify your email to complete the registration",
+    html: `<a target="_blank" href="${BASE_URL}/api/users/verify/${verificationToken}">Click to verify your email</a>`,
+  };
+  await sendEmail(emailData);
+
+  res.json({ message: "Verification email sent" });
+};
+
 const login = async (req, res) => {
   const { email, password } = req.body;
   const user = await UsersModel.findOne({ email });
@@ -120,6 +140,7 @@ const updateAvatar = async (req, res) => {
 
 export const registerUser = ctrlWrapper(register);
 export const verifyEmailUser = ctrlWrapper(verifyEmail);
+export const repeatVerifyEmailUser = ctrlWrapper(repeatVerifyEmail);
 export const loginUser = ctrlWrapper(login);
 export const logoutUser = ctrlWrapper(logout);
 export const getCurrentUser = ctrlWrapper(getCurrent);

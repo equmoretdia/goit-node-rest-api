@@ -2,6 +2,7 @@ import express from "express";
 import {
   registerUser,
   verifyEmailUser,
+  repeatVerifyEmailUser,
   loginUser,
   logoutUser,
   getCurrentUser,
@@ -13,6 +14,7 @@ import { authenticate } from "../middlewares/authenticate.js";
 import { upload } from "../middlewares/upload.js";
 import {
   registerSchema,
+  emailVerificationSchema,
   loginSchema,
   updateSubscriptionUserSchema,
 } from "../models/usersModel.js";
@@ -24,6 +26,12 @@ export const usersRouter = express.Router();
 usersRouter.post("/register", validateBody(registerSchema), registerUser);
 
 usersRouter.get("/verify/:verificationToken", verifyEmailUser);
+
+usersRouter.post(
+  "/verify",
+  validateBody(emailVerificationSchema),
+  repeatVerifyEmailUser
+);
 
 // sign in
 
