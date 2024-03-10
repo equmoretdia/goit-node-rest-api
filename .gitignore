@@ -4,3 +4,4 @@ node_modules/
 .vscode
 .DS_Store
 contacts.json
+package-lock.json
